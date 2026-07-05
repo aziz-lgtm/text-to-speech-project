@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Koe — text to speech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600&family=Inter:wght@400;500&family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1a1712;
+    --paper: #f6f2e9;
+    --card: #fffdf8;
+    --line: #ded6c4;
+    --accent-ja: #c0362c;
+    --accent-tr: #009cbf;
+    --accent: var(--accent-ja);
+    --muted: #7c7361;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 3.5rem 1.25rem 4rem; }
+
+  header { margin-bottom: 2.5rem; }
+  .mark {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 2.9rem;
+    line-height: 1;
+    color: var(--accent);
+    transition: color .4s ease;
+    display: inline-block;
+  }
+  h1 {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    font-size: 2rem;
+    margin: .4rem 0 .3rem;
+    letter-spacing: -.01em;
+  }
+  .sub { color: var(--muted); font-size: .95rem; margin: 0; }
+
+  .langs { display: flex; gap: .5rem; margin: 2rem 0 1.25rem; }
+  .lang-btn {
+    flex: 1;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: .95rem;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .1rem;
+    transition: all .2s ease;
+  }
+  .lang-btn .native {
+    font-family: 'Zilla Slab', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .lang-btn[aria-pressed="true"] { border-color: var(--accent); background: #fff; }
+  .lang-btn[aria-pressed="true"] .native { color: var(--accent); }
+
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    font-size: 1.05rem;
+    background: var(--card);
+    color: var(--ink);
+    transition: border-color .2s ease;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); }
+
+  .controls { display: flex; gap: 1.5rem; margin: 1.25rem 0; flex-wrap: wrap; }
+  .ctrl { flex: 1; min-width: 160px; }
+  .ctrl label {
+    display: flex; justify-content: space-between;
+    font-size: .85rem; color: var(--muted); margin-bottom: .35rem;
+  }
+  .ctrl label b { color: var(--ink); font-weight: 500; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+
+  .actions { display: flex; gap: .6rem; margin-top: 1.5rem; }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: .9rem 1.4rem;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all .2s ease;
+  }
+  .btn-primary { flex: 1; background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-primary:disabled { opacity: .55; cursor: default; }
+
+  .result { margin-top: 1.75rem; display: none; }
+  .result.show { display: block; }
+  audio { width: 100%; margin-bottom: .75rem; }
+  .download {
+    display: inline-flex; align-items: center; gap: .4rem;
+    color: var(--accent); font-weight: 500; text-decoration: none;
+    font-size: .95rem;
+  }
+  .download:hover { text-decoration: underline; }
+
+  .status { font-size: .9rem; margin-top: 1rem; min-height: 1.2em; }
+  .status.err { color: var(--accent-ja); }
+
+  footer { margin-top: 3rem; font-size: .82rem; color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="mark" id="mark">声</span>
+      <h1>Koe</h1>
+      <p class="sub">Turn Japanese or Turkish text into speech you can download.</p>
+    </header>
+
+    <div class="langs" role="group" aria-label="Choose a language">
+      <button class="lang-btn" id="btn-ja" data-lang="ja-JP" aria-pressed="true">
+        <span class="native">日本語</span>
+        <span>Japanese</span>
+      </button>
+      <button class="lang-btn" id="btn-tr" data-lang="tr-TR" aria-pressed="false">
+        <span class="native">Türkçe</span>
+        <span>Turkish</span>
+      </button>
+    </div>
+
+    <textarea id="text" placeholder="ここにテキストを入力してください…"></textarea>
+
+    <div class="controls">
+      <div class="ctrl">
+        <label>Speed <b id="rate-out">1.0×</b></label>
+        <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="1" />
+      </div>
+      <div class="ctrl">
+        <label>Pitch <b id="pitch-out">0 Hz</b></label>
+        <input type="range" id="pitch" min="-50" max="50" step="5" value="0" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="go">Generate speech</button>
+    </div>
+
+    <div class="result" id="result">
+      <audio id="audio" controls></audio>
+      <a class="download" id="download" download="speech.mp3" href="#">↓ Download MP3</a>
+    </div>
+
+    <p class="status" id="status"></p>
+
+    <footer>
+      Runs on Microsoft Edge neural voices via edge-tts · no account needed.
+    </footer>
+  </div>
+
+<script>
+  const state = { lang: 'ja-JP' };
+  const placeholders = {
+    'ja-JP': 'ここにテキストを入力してください…',
+    'tr-TR': 'Metninizi buraya yazın…',
+  };
+  const accents = { 'ja-JP': '#c0362c', 'tr-TR': '#009cbf' };
+  const marks = { 'ja-JP': '声', 'tr-TR': 'Ses' };
+
+  const textEl = document.getElementById('text');
+  const rate = document.getElementById('rate');
+  const pitch = document.getElementById('pitch');
+  const rateOut = document.getElementById('rate-out');
+  const pitchOut = document.getElementById('pitch-out');
+  const go = document.getElementById('go');
+  const status = document.getElementById('status');
+  const result = document.getElementById('result');
+  const audio = document.getElementById('audio');
+  const download = document.getElementById('download');
+  const mark = document.getElementById('mark');
+
+  function selectLang(lang) {
+    state.lang = lang;
+    document.documentElement.style.setProperty('--accent', accents[lang]);
+    mark.textContent = marks[lang];
+    textEl.placeholder = placeholders[lang];
+    document.getElementById('btn-ja').setAttribute('aria-pressed', lang === 'ja-JP');
+    document.getElementById('btn-tr').setAttribute('aria-pressed', lang === 'tr-TR');
+  }
+
+  document.getElementById('btn-ja').onclick = () => selectLang('ja-JP');
+  document.getElementById('btn-tr').onclick = () => selectLang('tr-TR');
+
+  rate.oninput = () => rateOut.textContent = parseFloat(rate.value).toFixed(2) + '×';
+  pitch.oninput = () => pitchOut.textContent = pitch.value + ' Hz';
+
+  go.onclick = async () => {
+    const text = textEl.value.trim();
+    if (!text) { setStatus('Type something first.', true); return; }
+
+    go.disabled = true;
+    setStatus('Generating…');
+    result.classList.remove('show');
+
+    try {
+      const res = await fetch('/synthesize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text,
+          lang: state.lang,
+          rate: parseFloat(rate.value),
+          pitch: parseFloat(pitch.value),
+        }),
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({}));
+        throw new Error(error || 'Something went wrong.');
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      audio.src = url;
+      download.href = url;
+      download.download = (state.lang === 'ja-JP' ? 'japanese' : 'turkish') + '-speech.mp3';
+      result.classList.add('show');
+      setStatus('');
+      audio.play().catch(() => {});
+    } catch (e) {
+      setStatus(e.message, true);
+    } finally {
+      go.disabled = false;
+    }
+  };
+
+  function setStatus(msg, isErr) {
+    status.textContent = msg;
+    status.className = 'status' + (isErr ? ' err' : '');
+  }
+</script>
+</body>
+</html>
