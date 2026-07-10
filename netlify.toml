@@ -1,0 +1,8 @@
+# Konfigurasi Netlify.
+[build]
+  publish = "public"                      # folder halaman web
+  functions = "netlify/functions"         # folder backend
+
+[functions]
+  # Kasih waktu lebih buat edge-tts nyelesaiin audio panjang
+  node_bundler = "esbuild"

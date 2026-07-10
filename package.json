@@ -1,0 +1,8 @@
+{
+  "name": "koe-tts-js",
+  "version": "1.0.0",
+  "description": "Japanese & Turkish text-to-speech, downloadable, no signup",
+  "dependencies": {
+    "msedge-tts": "^2.0.6"
+  }
+}
