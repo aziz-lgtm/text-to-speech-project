@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Koe — text to speech</title>
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600&family=Inter:wght@400;500&family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1a1712;
+    --paper: #f6f2e9;
+    --card: #fffdf8;
+    --line: #ded6c4;
+    --accent-ja: #c0362c;
+    --accent-tr: #009cbf;
+    --accent: var(--accent-ja);
+    --muted: #7c7361;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 1.25rem 1.25rem 4rem; }
+
+  nav.site {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  nav.site .brand {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1.05rem;
+    margin-right: auto;
+  }
+  nav.site a.link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .92rem;
+    padding: .3rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  nav.site a.link:hover { color: var(--ink); }
+  nav.site a.link.active { color: var(--accent); border-color: var(--accent); }
+
+  header { margin-bottom: 2.5rem; }
+  .mark {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 2.9rem;
+    line-height: 1;
+    color: var(--accent);
+    transition: color .4s ease;
+    display: inline-block;
+  }
+  h1 {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    font-size: 2rem;
+    margin: .4rem 0 .3rem;
+    letter-spacing: -.01em;
+  }
+  .sub { color: var(--muted); font-size: .95rem; margin: 0; }
+
+  .lang-select { margin: 2rem 0 1.25rem; }
+  .lang-select label {
+    display: block;
+    font-size: .85rem;
+    color: var(--muted);
+    margin-bottom: .4rem;
+  }
+  .lang-select select {
+    width: 100%;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+    font-family: 'Zilla Slab', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color .2s ease;
+  }
+  .lang-select select:focus { outline: none; border-color: var(--accent); }
+
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    font-size: 1.05rem;
+    background: var(--card);
+    color: var(--ink);
+    transition: border-color .2s ease;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); }
+
+  .controls { display: flex; gap: 1.5rem; margin: 1.25rem 0; flex-wrap: wrap; }
+  .ctrl { flex: 1; min-width: 160px; }
+  .ctrl label {
+    display: flex; justify-content: space-between;
+    font-size: .85rem; color: var(--muted); margin-bottom: .35rem;
+  }
+  .ctrl label b { color: var(--ink); font-weight: 500; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+
+  .actions { display: flex; gap: .6rem; margin-top: 1.5rem; }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: .9rem 1.4rem;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all .2s ease;
+  }
+  .btn-primary { flex: 1; background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-primary:disabled { opacity: .55; cursor: default; }
+
+  .result { margin-top: 1.75rem; display: none; }
+  .result.show { display: block; }
+  audio { width: 100%; margin-bottom: .75rem; }
+  .download {
+    display: inline-flex; align-items: center; gap: .4rem;
+    color: var(--accent); font-weight: 500; text-decoration: none;
+    font-size: .95rem;
+  }
+  .download:hover { text-decoration: underline; }
+
+  .status { font-size: .9rem; margin-top: 1rem; min-height: 1.2em; }
+  .status.err { color: var(--accent-ja); }
+
+  footer { margin-top: 3rem; font-size: .82rem; color: var(--muted); }
+</style>
+</head>
+<body>
+  <nav class="site">
+    <a class="brand" href="index.html">Koe</a>
+    <a class="link" href="index.html">Home</a>
+    <a class="link active" href="tts.html">Text to Speech</a>
+    <a class="link" href="turkish-lessons/index.html">Turkish Lessons</a>
+  </nav>
+  <div class="wrap">
+    <header>
+      <span class="mark" id="mark">声</span>
+      <h1>Koe</h1>
+      <p class="sub">Turn Japanese or Turkish text into speech you can download.</p>
+    </header>
+
+    <div class="lang-select">
+      <label for="lang">Language</label>
+      <select id="lang">
+        <option value="ja-JP">日本語 — Japanese</option>
+        <option value="tr-TR">Türkçe — Turkish</option>
+        <option value="en-US">English (US)</option>
+        <option value="en-GB">English (UK)</option>
+      </select>
+    </div>
+
+    <textarea id="text" placeholder="ここにテキストを入力してください…"></textarea>
+
+    <div class="controls">
+      <div class="ctrl">
+        <label>Speed <b id="rate-out">1.0×</b></label>
+        <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="1" />
+      </div>
+      <div class="ctrl">
+        <label>Pitch <b id="pitch-out">0 Hz</b></label>
+        <input type="range" id="pitch" min="-50" max="50" step="5" value="0" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="go">Generate speech</button>
+    </div>
+
+    <div class="result" id="result">
+      <audio id="audio" controls></audio>
+      <a class="download" id="download" download="speech.mp3" href="#">↓ Download MP3</a>
+    </div>
+
+    <p class="status" id="status"></p>
+
+    <footer>
+      Runs on Microsoft Edge neural voices · no account needed.
+    </footer>
+  </div>
+
+<script>
+  const state = { lang: 'ja-JP' };
+  const placeholders = {
+    'ja-JP': 'ここにテキストを入力してください…',
+    'tr-TR': 'Metninizi buraya yazın…',
+    'en-US': 'Type your text here…',
+    'en-GB': 'Type your text here…',
+  };
+  const accents = { 'ja-JP': '#c0362c', 'tr-TR': '#009cbf', 'en-US': '#3b5ba5', 'en-GB': '#5b3ba5' };
+  const marks = { 'ja-JP': '声', 'tr-TR': 'Ses', 'en-US': 'Say', 'en-GB': 'Say' };
+  const fileNames = { 'ja-JP': 'japanese', 'tr-TR': 'turkish', 'en-US': 'english', 'en-GB': 'english-uk' };
+
+  const textEl = document.getElementById('text');
+  const rate = document.getElementById('rate');
+  const pitch = document.getElementById('pitch');
+  const rateOut = document.getElementById('rate-out');
+  const pitchOut = document.getElementById('pitch-out');
+  const go = document.getElementById('go');
+  const status = document.getElementById('status');
+  const result = document.getElementById('result');
+  const audio = document.getElementById('audio');
+  const download = document.getElementById('download');
+  const mark = document.getElementById('mark');
+  const langSelect = document.getElementById('lang');
+
+  function selectLang(lang) {
+    state.lang = lang;
+    document.documentElement.style.setProperty('--accent', accents[lang]);
+    mark.textContent = marks[lang];
+    textEl.placeholder = placeholders[lang];
+  }
+
+  langSelect.onchange = () => selectLang(langSelect.value);
+
+  rate.oninput = () => rateOut.textContent = parseFloat(rate.value).toFixed(2) + '×';
+  pitch.oninput = () => pitchOut.textContent = pitch.value + ' Hz';
+
+  go.onclick = async () => {
+    const text = textEl.value.trim();
+    if (!text) { setStatus('Type something first.', true); return; }
+
+    go.disabled = true;
+    setStatus('Generating…');
+    result.classList.remove('show');
+
+    try {
+      const res = await fetch('/.netlify/functions/synthesize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text,
+          lang: state.lang,
+          rate: parseFloat(rate.value),
+          pitch: parseFloat(pitch.value),
+        }),
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({}));
+        throw new Error(error || 'Something went wrong.');
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      audio.src = url;
+      download.href = url;
+      download.download = fileNames[state.lang] + '-speech.mp3';
+      result.classList.add('show');
+      setStatus('');
+      audio.play().catch(() => {});
+    } catch (e) {
+      setStatus(e.message, true);
+    } finally {
+      go.disabled = false;
+    }
+  };
+
+  function setStatus(msg, isErr) {
+    status.textContent = msg;
+    status.className = 'status' + (isErr ? ' err' : '');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turkish Lessons — Koe</title>
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tr-red:#E30A17;
+    --tr-red-dark:#a90c16;
+    --tr-cream:#fdf6ec;
+    --tr-gold:#c9a24b;
+    --tr-ink:#2b1b12;
+    --muted:#8a7a5f;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Merriweather', Georgia, serif;
+    color:var(--tr-ink);
+    background:
+      radial-gradient(circle at 15% 10%, rgba(227,10,23,0.10), transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(227,10,23,0.10), transparent 40%),
+      var(--tr-cream);
+    line-height:1.7;
+  }
+
+  nav.site {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 1.5rem 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-family: 'Merriweather', Georgia, serif;
+  }
+  nav.site .brand {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    color: var(--tr-ink);
+    text-decoration: none;
+    font-size: 1.05rem;
+    margin-right: auto;
+  }
+  nav.site a.link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .9rem;
+    padding: .3rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  nav.site a.link:hover { color: var(--tr-ink); }
+  nav.site a.link.active { color: var(--tr-red); border-color: var(--tr-red); }
+
+  .page{
+    max-width:820px;
+    margin:24px auto 80px;
+    padding: 0 16px;
+  }
+
+  header.hero{
+    text-align:center;
+    padding: 36px 0 30px;
+  }
+
+  .crescent-star{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .crescent-star svg{ width:30px; height:30px; fill:var(--tr-red); opacity:0.9; }
+
+  .eyebrow{
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    font-weight:400;
+    color:var(--muted);
+    margin:0 0 8px;
+  }
+
+  h1{
+    font-family:'Cinzel', 'Merriweather', serif;
+    font-size:clamp(1.8rem, 5vw, 2.5rem);
+    margin:0 0 .5rem;
+    color:var(--tr-red-dark);
+    letter-spacing:0.02em;
+  }
+
+  .subtitle{
+    margin:0 auto;
+    max-width: 480px;
+    font-style:italic;
+    font-weight:300;
+    color:var(--muted);
+    font-size:1.02rem;
+  }
+
+  .units {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .unit-card {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    background:#fffdf9;
+    border:1px solid rgba(201,162,75,0.35);
+    border-radius:14px;
+    padding: 1.2rem 1.4rem;
+    text-decoration: none;
+    color: var(--tr-ink);
+    box-shadow:0 8px 24px rgba(43,27,18,0.06);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .unit-card:hover {
+    transform: translateY(-2px);
+    box-shadow:0 14px 32px rgba(43,27,18,0.12);
+  }
+  .unit-num {
+    font-family:'Cinzel', serif;
+    font-size:1.4rem;
+    color:var(--tr-red);
+    min-width: 2.4rem;
+    text-align:center;
+  }
+  .unit-info h2 {
+    font-family:'Cinzel', serif;
+    font-size:1.1rem;
+    margin: 0 0 .25rem;
+  }
+  .unit-info p {
+    margin: 0;
+    font-size: .9rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .coming-soon {
+    text-align:center;
+    color: var(--muted);
+    font-size: .9rem;
+    font-style: italic;
+    margin-top: 2rem;
+  }
+
+  footer{
+    text-align:center;
+    padding:18px;
+    font-size:0.8rem;
+    color:var(--muted);
+    letter-spacing:0.05em;
+  }
+</style>
+</head>
+<body>
+  <nav class="site">
+    <a class="brand" href="../index.html">Koe</a>
+    <a class="link" href="../index.html">Home</a>
+    <a class="link" href="../tts.html">Text to Speech</a>
+    <a class="link active" href="index.html">Turkish Lessons</a>
+  </nav>
+
+  <div class="page">
+    <header class="hero">
+      <div class="crescent-star" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M14.5 2C8.7 2 4 6.7 4 12.5S8.7 23 14.5 23c2.6 0 5-1 6.8-2.6-1.3.5-2.7.8-4.2.8-6 0-10.9-4.9-10.9-10.9 0-4 2.2-7.5 5.5-9.3-1.2.3-2.4.8-3.4 1.5C10.4 3 12.4 2 14.5 2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.5L21 9l-5 4.6L17.5 21 12 17.3 6.5 21 8 13.6 3 9l6.6-.5z"/></svg>
+      </div>
+      <p class="eyebrow">Türkçe Öğreniyorum</p>
+      <h1>Turkish Lessons</h1>
+      <p class="subtitle">Short stories with narrated audio — read along, listen, and pick up new words unit by unit.</p>
+    </header>
+
+    <div class="units">
+      <a class="unit-card" href="unit-1.html">
+        <span class="unit-num">1</span>
+        <span class="unit-info">
+          <h2>Ali'nin Günü</h2>
+          <p>İstanbul'da geçen bir gün — a day in the life, told through a story with narrated audio.</p>
+        </span>
+      </a>
+    </div>
+
+    <p class="coming-soon">More units coming soon.</p>
+  </div>
+
+  <footer>Turkish Lessons · Koe</footer>
+</body>
+</html>

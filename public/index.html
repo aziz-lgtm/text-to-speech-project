@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Koe — text to speech</title>
+<title>Koe — text to speech &amp; Turkish lessons</title>
 <link rel="icon" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,230 +28,141 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 620px; margin: 0 auto; padding: 3.5rem 1.25rem 4rem; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 1.25rem 1.25rem 4rem; }
 
-  header { margin-bottom: 2.5rem; }
+  nav.site {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  nav.site .brand {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 1.05rem;
+    margin-right: auto;
+  }
+  nav.site a.link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .92rem;
+    padding: .3rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  nav.site a.link:hover { color: var(--ink); }
+  nav.site a.link.active { color: var(--accent); border-color: var(--accent); }
+
+  header.hero { margin: 2.5rem 0 3rem; text-align: center; }
   .mark {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 2.9rem;
+    font-size: 3.4rem;
     line-height: 1;
-    color: var(--accent);
-    transition: color .4s ease;
+    color: var(--accent-ja);
     display: inline-block;
   }
   h1 {
     font-family: 'Zilla Slab', serif;
     font-weight: 600;
-    font-size: 2rem;
-    margin: .4rem 0 .3rem;
+    font-size: 2.2rem;
+    margin: .5rem 0 .6rem;
     letter-spacing: -.01em;
   }
-  .sub { color: var(--muted); font-size: .95rem; margin: 0; }
+  .sub { color: var(--muted); font-size: 1.05rem; margin: 0 auto; max-width: 520px; }
 
-  .lang-select { margin: 2rem 0 1.25rem; }
-  .lang-select label {
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 2.5rem 0; }
+  @media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+
+  .card {
     display: block;
-    font-size: .85rem;
-    color: var(--muted);
-    margin-bottom: .4rem;
-  }
-  .lang-select select {
-    width: 100%;
-    border: 1.5px solid var(--line);
     background: var(--card);
-    border-radius: 10px;
-    padding: .85rem 1rem;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 1.75rem 1.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .card:hover { border-color: var(--card-accent, var(--accent)); transform: translateY(-2px); }
+  .card .icon {
+    font-size: 2rem;
+    display: inline-block;
+    margin-bottom: .75rem;
+  }
+  .card h2 {
     font-family: 'Zilla Slab', serif;
-    font-size: 1.1rem;
     font-weight: 600;
-    color: var(--ink);
-    cursor: pointer;
-    transition: border-color .2s ease;
+    font-size: 1.25rem;
+    margin: 0 0 .4rem;
   }
-  .lang-select select:focus { outline: none; border-color: var(--accent); }
+  .card p { color: var(--muted); font-size: .92rem; margin: 0; }
+  .card.tts { --card-accent: var(--accent-ja); }
+  .card.lessons { --card-accent: var(--accent-tr); }
+  .card .icon.tts { color: var(--accent-ja); }
+  .card .icon.lessons { color: var(--accent-tr); }
+  .card .cta {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: .88rem;
+    font-weight: 500;
+  }
+  .card.tts .cta { color: var(--accent-ja); }
+  .card.lessons .cta { color: var(--accent-tr); }
 
-  textarea {
-    width: 100%;
-    min-height: 150px;
-    resize: vertical;
-    border: 1.5px solid var(--line);
-    border-radius: 10px;
-    padding: 1rem;
-    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  .about { margin-top: 3rem; padding-top: 2rem; border-top: 1.5px solid var(--line); }
+  .about h3 {
+    font-family: 'Zilla Slab', serif;
     font-size: 1.05rem;
-    background: var(--card);
-    color: var(--ink);
-    transition: border-color .2s ease;
+    margin: 0 0 .6rem;
   }
-  textarea:focus { outline: none; border-color: var(--accent); }
+  .about p { color: var(--muted); font-size: .95rem; margin: 0 0 .8rem; }
 
-  .controls { display: flex; gap: 1.5rem; margin: 1.25rem 0; flex-wrap: wrap; }
-  .ctrl { flex: 1; min-width: 160px; }
-  .ctrl label {
-    display: flex; justify-content: space-between;
-    font-size: .85rem; color: var(--muted); margin-bottom: .35rem;
-  }
-  .ctrl label b { color: var(--ink); font-weight: 500; }
-  input[type=range] { width: 100%; accent-color: var(--accent); }
-
-  .actions { display: flex; gap: .6rem; margin-top: 1.5rem; }
-  .btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    border-radius: 10px;
-    padding: .9rem 1.4rem;
-    cursor: pointer;
-    border: 1.5px solid transparent;
-    transition: all .2s ease;
-  }
-  .btn-primary { flex: 1; background: var(--accent); color: #fff; }
-  .btn-primary:hover { filter: brightness(1.05); }
-  .btn-primary:disabled { opacity: .55; cursor: default; }
-
-  .result { margin-top: 1.75rem; display: none; }
-  .result.show { display: block; }
-  audio { width: 100%; margin-bottom: .75rem; }
-  .download {
-    display: inline-flex; align-items: center; gap: .4rem;
-    color: var(--accent); font-weight: 500; text-decoration: none;
-    font-size: .95rem;
-  }
-  .download:hover { text-decoration: underline; }
-
-  .status { font-size: .9rem; margin-top: 1rem; min-height: 1.2em; }
-  .status.err { color: var(--accent-ja); }
-
-  footer { margin-top: 3rem; font-size: .82rem; color: var(--muted); }
+  footer { margin-top: 3rem; font-size: .82rem; color: var(--muted); text-align: center; }
 </style>
 </head>
 <body>
+  <nav class="site">
+    <a class="brand" href="index.html">Koe</a>
+    <a class="link active" href="index.html">Home</a>
+    <a class="link" href="tts.html">Text to Speech</a>
+    <a class="link" href="turkish-lessons/index.html">Turkish Lessons</a>
+  </nav>
+
   <div class="wrap">
-    <header>
-      <span class="mark" id="mark">声</span>
+    <header class="hero">
+      <span class="mark">声</span>
       <h1>Koe</h1>
-      <p class="sub">Turn Japanese or Turkish text into speech you can download.</p>
+      <p class="sub">One little site for two things: turning text into speech, and learning Turkish through short stories you can listen to.</p>
     </header>
 
-    <div class="lang-select">
-      <label for="lang">Language</label>
-      <select id="lang">
-        <option value="ja-JP">日本語 — Japanese</option>
-        <option value="tr-TR">Türkçe — Turkish</option>
-        <option value="en-US">English (US)</option>
-        <option value="en-GB">English (UK)</option>
-      </select>
+    <div class="cards">
+      <a class="card tts" href="tts.html">
+        <span class="icon tts">🔊</span>
+        <h2>Text to Speech</h2>
+        <p>Type Japanese, Turkish, or English text and generate natural-sounding speech you can play or download as an MP3.</p>
+        <span class="cta">Open the generator →</span>
+      </a>
+      <a class="card lessons" href="turkish-lessons/index.html">
+        <span class="icon lessons">📖</span>
+        <h2>Turkish Lessons</h2>
+        <p>Read short Turkish stories with audio narration, unit by unit, to build vocabulary and listening skills.</p>
+        <span class="cta">Start learning →</span>
+      </a>
     </div>
 
-    <textarea id="text" placeholder="ここにテキストを入力してください…"></textarea>
-
-    <div class="controls">
-      <div class="ctrl">
-        <label>Speed <b id="rate-out">1.0×</b></label>
-        <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="1" />
-      </div>
-      <div class="ctrl">
-        <label>Pitch <b id="pitch-out">0 Hz</b></label>
-        <input type="range" id="pitch" min="-50" max="50" step="5" value="0" />
-      </div>
+    <div class="about">
+      <h3>What is this site for?</h3>
+      <p>Koe started as a simple text-to-speech tool for Japanese and Turkish, built on Microsoft's neural voices so you can hear text read aloud and download the audio, no account required.</p>
+      <p>It has since grown into a small language-learning corner too — the Turkish Lessons section pairs narrated stories with the text on the page, so you can read along while you listen and pick up new words in context.</p>
     </div>
-
-    <div class="actions">
-      <button class="btn btn-primary" id="go">Generate speech</button>
-    </div>
-
-    <div class="result" id="result">
-      <audio id="audio" controls></audio>
-      <a class="download" id="download" download="speech.mp3" href="#">↓ Download MP3</a>
-    </div>
-
-    <p class="status" id="status"></p>
 
     <footer>
       Runs on Microsoft Edge neural voices · no account needed.
     </footer>
   </div>
-
-<script>
-  const state = { lang: 'ja-JP' };
-  const placeholders = {
-    'ja-JP': 'ここにテキストを入力してください…',
-    'tr-TR': 'Metninizi buraya yazın…',
-    'en-US': 'Type your text here…',
-    'en-GB': 'Type your text here…',
-  };
-  const accents = { 'ja-JP': '#c0362c', 'tr-TR': '#009cbf', 'en-US': '#3b5ba5', 'en-GB': '#5b3ba5' };
-  const marks = { 'ja-JP': '声', 'tr-TR': 'Ses', 'en-US': 'Say', 'en-GB': 'Say' };
-  const fileNames = { 'ja-JP': 'japanese', 'tr-TR': 'turkish', 'en-US': 'english', 'en-GB': 'english-uk' };
-
-  const textEl = document.getElementById('text');
-  const rate = document.getElementById('rate');
-  const pitch = document.getElementById('pitch');
-  const rateOut = document.getElementById('rate-out');
-  const pitchOut = document.getElementById('pitch-out');
-  const go = document.getElementById('go');
-  const status = document.getElementById('status');
-  const result = document.getElementById('result');
-  const audio = document.getElementById('audio');
-  const download = document.getElementById('download');
-  const mark = document.getElementById('mark');
-  const langSelect = document.getElementById('lang');
-
-  function selectLang(lang) {
-    state.lang = lang;
-    document.documentElement.style.setProperty('--accent', accents[lang]);
-    mark.textContent = marks[lang];
-    textEl.placeholder = placeholders[lang];
-  }
-
-  langSelect.onchange = () => selectLang(langSelect.value);
-
-  rate.oninput = () => rateOut.textContent = parseFloat(rate.value).toFixed(2) + '×';
-  pitch.oninput = () => pitchOut.textContent = pitch.value + ' Hz';
-
-  go.onclick = async () => {
-    const text = textEl.value.trim();
-    if (!text) { setStatus('Type something first.', true); return; }
-
-    go.disabled = true;
-    setStatus('Generating…');
-    result.classList.remove('show');
-
-    try {
-      const res = await fetch('/.netlify/functions/synthesize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text,
-          lang: state.lang,
-          rate: parseFloat(rate.value),
-          pitch: parseFloat(pitch.value),
-        }),
-      });
-
-      if (!res.ok) {
-        const { error } = await res.json().catch(() => ({}));
-        throw new Error(error || 'Something went wrong.');
-      }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      audio.src = url;
-      download.href = url;
-      download.download = fileNames[state.lang] + '-speech.mp3';
-      result.classList.add('show');
-      setStatus('');
-      audio.play().catch(() => {});
-    } catch (e) {
-      setStatus(e.message, true);
-    } finally {
-      go.disabled = false;
-    }
-  };
-
-  function setStatus(msg, isErr) {
-    status.textContent = msg;
-    status.className = 'status' + (isErr ? ' err' : '');
-  }
-</script>
 </body>
 </html>
