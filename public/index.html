@@ -7,7 +7,7 @@
 <script src="theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600&family=Inter:wght@400;500&family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet" />
 <style>
   :root {
     --ink: #1a1712;
@@ -33,7 +33,7 @@
     margin: 0;
     background: var(--paper);
     color: var(--ink);
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Poppins', system-ui, sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     transition: background .25s ease, color .25s ease;
@@ -49,7 +49,7 @@
     gap: 1.5rem;
   }
   nav.site .brand {
-    font-family: 'Zilla Slab', serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     color: var(--ink);
     text-decoration: none;
@@ -84,6 +84,40 @@
   }
   nav.site .theme-toggle:hover { border-color: var(--accent); transform: rotate(15deg); }
 
+  nav.site .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-left: auto;
+  }
+  nav.site .nav-toggle {
+    display: none;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-left: auto;
+  }
+  @media (max-width: 1280px) {
+    nav.site { flex-wrap: wrap; }
+    nav.site .nav-toggle { display: inline-flex; }
+    nav.site .nav-links {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin: 1rem 0 0;
+    }
+    nav.site .nav-links.open { display: flex; }
+  }
+
   header.hero { margin: 2.5rem 0 3rem; text-align: center; }
   .mark {
     font-family: 'Noto Sans JP', sans-serif;
@@ -93,7 +127,7 @@
     display: inline-block;
   }
   h1 {
-    font-family: 'Zilla Slab', serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 2.2rem;
     margin: .5rem 0 .6rem;
@@ -121,7 +155,7 @@
     margin-bottom: .75rem;
   }
   .card h2 {
-    font-family: 'Zilla Slab', serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 1.25rem;
     margin: 0 0 .4rem;
@@ -142,7 +176,7 @@
 
   .about { margin-top: 3rem; padding-top: 2rem; border-top: 1.5px solid var(--line); }
   .about h3 {
-    font-family: 'Zilla Slab', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 1.05rem;
     margin: 0 0 .6rem;
   }
@@ -154,10 +188,14 @@
 <body>
   <nav class="site">
     <a class="brand" href="index.html">Koe</a>
-    <a class="link active" href="index.html">Home</a>
-    <a class="link" href="tts.html">Text to Speech</a>
-    <a class="link" href="turkish-lessons/index.html">Turkish Lessons</a>
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="icon">🌙</span></button>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a class="link active" href="index.html">Home</a>
+      <a class="link" href="tts.html">Text to Speech</a>
+      <a class="link" href="japanese-lessons/index.html">Japanese Lessons</a>
+      <a class="link" href="turkish-lessons/index.html">Turkish Lessons</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="icon">🌙</span></button>
+    </div>
   </nav>
 
   <div class="wrap">
@@ -173,6 +211,12 @@
         <h2>Text to Speech</h2>
         <p>Type Japanese, Turkish, or English text and generate natural-sounding speech you can play or download as an MP3.</p>
         <span class="cta">Open the generator →</span>
+      </a>
+      <a class="card lessons" href="japanese-lessons/index.html">
+        <span class="icon lessons">📖</span>
+        <h2>Japanese Lessons</h2>
+        <p>Grammar patterns and example sentences with narrated audio, unit by unit, to build reading and listening skills.</p>
+        <span class="cta">Start learning →</span>
       </a>
       <a class="card lessons" href="turkish-lessons/index.html">
         <span class="icon lessons">📖</span>

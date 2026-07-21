@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第24課 — くれる・もらう・あげる | Koe</title>
+<script src="../theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ja-red:#c0362c;
+    --ja-red-dark:#8f271f;
+    --ja-cream:#f6f2e9;
+    --ja-gold:#c9a24b;
+    --ja-ink:#1a1712;
+    --muted:#7c7361;
+    --card-bg:#fffdf8;
+    --card-border:rgba(192,54,44,0.18);
+    --shadow-1:rgba(26,23,18,0.16);
+    --shadow-2:rgba(26,23,18,0.07);
+    --audio-bg-1:#fbeeec;
+    --audio-bg-2:#f7e2de;
+    --audio-border:rgba(192,54,44,0.25);
+    --pattern-bg:#fbeeec;
+    --pattern-border:var(--ja-red);
+    --answer-color:#7c7361;
+    --closing-color:#7c7361;
+    --bg-glow:rgba(192,54,44,0.10);
+  }
+
+  html[data-theme="dark"]{
+    --ja-red:#ff6a52;
+    --ja-red-dark:#ff9284;
+    --ja-cream:#100d09;
+    --ja-gold:#e3b768;
+    --ja-ink:#f2ede0;
+    --muted:#a89a80;
+    --card-bg:#1c1712;
+    --card-border:rgba(255,106,82,0.22);
+    --shadow-1:rgba(0,0,0,0.5);
+    --shadow-2:rgba(0,0,0,0.35);
+    --audio-bg-1:#2a1a16;
+    --audio-bg-2:#241813;
+    --audio-border:rgba(255,106,82,0.28);
+    --pattern-bg:#241813;
+    --pattern-border:var(--ja-red);
+    --answer-color:#a89a80;
+    --closing-color:#a89a80;
+    --bg-glow:rgba(255,106,82,0.16);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Klee One', 'Noto Sans JP', 'Zilla Slab', sans-serif;
+    font-weight:600;
+    color:var(--ja-ink);
+    background:
+      radial-gradient(circle at 15% 10%, var(--bg-glow), transparent 40%),
+      radial-gradient(circle at 85% 85%, var(--bg-glow), transparent 40%),
+      var(--ja-cream);
+    padding:48px 16px 80px;
+    line-height:1.9;
+    transition: background .25s ease, color .25s ease;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:0.05;
+    background-image: radial-gradient(var(--ja-red) 2px, transparent 2px);
+    background-size:34px 34px;
+    z-index:0;
+  }
+
+  nav.site {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 16px 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  nav.site .brand {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    color: var(--ja-ink);
+    text-decoration: none;
+    font-size: 1.05rem;
+    margin-right: auto;
+  }
+  nav.site a.link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .9rem;
+    padding: .3rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  nav.site a.link:hover { color: var(--ja-ink); }
+  nav.site a.link.active { color: var(--ja-red); border-color: var(--ja-red); }
+
+  nav.site .theme-toggle {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--card-border);
+    background: var(--card-bg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+    transition: border-color .2s ease, transform .3s ease;
+  }
+  nav.site .theme-toggle:hover { border-color: var(--ja-red); transform: rotate(15deg); }
+
+  nav.site .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-left: auto;
+  }
+  nav.site .nav-toggle {
+    display: none;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--card-border);
+    background: var(--card-bg);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--ja-ink);
+    margin-left: auto;
+  }
+  @media (max-width: 1280px) {
+    nav.site { flex-wrap: wrap; }
+    nav.site .nav-toggle { display: inline-flex; }
+    nav.site .nav-links {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin: 1rem 0 0;
+    }
+    nav.site .nav-links.open { display: flex; }
+  }
+
+  .page{
+    position:relative;
+    z-index:1;
+    max-width:760px;
+    margin:0 auto;
+    background:var(--card-bg);
+    border-radius:18px;
+    box-shadow:0 20px 60px var(--shadow-1), 0 2px 8px var(--shadow-2);
+    overflow:hidden;
+    border:1px solid var(--card-border);
+    transition: background .25s ease, border-color .25s ease;
+  }
+
+  .banner{
+    background:linear-gradient(135deg, var(--ja-red) 0%, var(--ja-red-dark) 100%);
+    color:#fffdf8;
+    padding:44px 32px 34px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .banner::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.08) 0%, transparent 45%);
+  }
+
+  .sakura{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:14px;
+    position:relative;
+    z-index:1;
+  }
+  .sakura svg{ width:28px; height:28px; fill:#fffdf8; opacity:0.95; }
+
+  .eyebrow{
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    font-weight:500;
+    color:rgba(255,253,248,0.85);
+    margin:0 0 8px;
+    position:relative;
+    z-index:1;
+  }
+
+  h1{
+    font-family:'Klee One', 'Noto Sans JP', sans-serif;
+    font-weight:600;
+    font-size:clamp(2rem, 5vw, 2.9rem);
+    margin:0;
+    letter-spacing:0.04em;
+    position:relative;
+    z-index:1;
+    text-shadow:0 2px 10px rgba(0,0,0,0.15);
+  }
+
+  .subtitle{
+    margin:10px 0 0;
+    font-weight:600;
+    color:rgba(255,253,248,0.92);
+    font-size:1.1rem;
+    position:relative;
+    z-index:1;
+  }
+
+  .gold-divider{ height:3px; background:linear-gradient(90deg, transparent, var(--ja-gold), transparent); }
+
+  .audio-wrap{
+    margin:26px 32px 0;
+    padding:18px 20px;
+    background:linear-gradient(135deg, var(--audio-bg-1), var(--audio-bg-2));
+    border:1px solid var(--audio-border);
+    border-radius:10px;
+    text-align:center;
+  }
+  .audio-label{
+    margin:0 0 10px;
+    font-family:'Klee One', 'Zilla Slab', serif;
+    font-weight:600;
+    font-size:0.95rem;
+    letter-spacing:0.08em;
+    color:var(--ja-red-dark);
+  }
+  .audio-wrap audio{ width:100%; max-width:520px; accent-color:var(--ja-red); }
+
+  section.content{ padding:36px 40px 46px; }
+
+  section.content h2{
+    font-family:'Klee One', 'Zilla Slab', serif;
+    font-weight:600;
+    text-align:center;
+    color:var(--ja-red-dark);
+    font-size:1.7rem;
+    margin:4px 0 26px;
+  }
+  section.content h2::before,
+  section.content h2::after{
+    content:"❀";
+    color:var(--ja-gold);
+    font-size:1rem;
+    margin:0 14px;
+    vertical-align:middle;
+  }
+
+  .patterns{ margin:0 0 40px; }
+  .pattern{
+    background:var(--pattern-bg);
+    border-left:4px solid var(--pattern-border);
+    border-radius:6px;
+    padding:14px 18px;
+    margin:0 0 12px;
+    font-size:1.05rem;
+  }
+  .pattern .num{ color:var(--ja-red); font-weight:700; margin-right:6px; }
+
+  .examples{ list-style:none; margin:0; padding:0; counter-reset:ex; }
+  .example{
+    counter-increment:ex;
+    margin:0 0 22px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--card-border);
+  }
+  .example:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  .example .q{ position:relative; padding-left:2rem; font-size:1.05rem; }
+  .example .q::before{
+    content:counter(ex) ".";
+    position:absolute;
+    left:0;
+    color:var(--ja-red);
+    font-weight:700;
+  }
+  .example .a{
+    margin:8px 0 0 2rem;
+    color:var(--answer-color);
+    font-style:normal;
+  }
+
+  .closing{
+    text-align:center;
+    margin-top:8px;
+    font-style:normal;
+    color:var(--closing-color);
+    font-size:0.95rem;
+  }
+
+  .sakura-row{ display:flex; justify-content:center; gap:14px; padding:0 0 34px; }
+  .sakura-row svg{ width:22px; height:22px; fill:var(--ja-red); opacity:0.85; }
+
+  footer{
+    text-align:center;
+    padding:18px;
+    font-size:0.8rem;
+    color:var(--muted);
+    letter-spacing:0.05em;
+    position:relative;
+    z-index:1;
+  }
+
+  @media (max-width:600px){
+    section.content{ padding:28px 22px 36px; }
+    .audio-wrap{ margin:22px 20px 0; }
+    .banner{ padding:34px 20px 26px; }
+    .example .a{ margin-left:1.4rem; }
+    .example .q{ padding-left:1.6rem; }
+  }
+</style>
+</head>
+<body>
+  <nav class="site">
+    <a class="brand" href="../index.html">Koe</a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a class="link" href="../index.html">Home</a>
+      <a class="link" href="../tts.html">Text to Speech</a>
+      <a class="link active" href="index.html">Japanese Lessons</a>
+      <a class="link" href="../turkish-lessons/index.html">Turkish Lessons</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="icon">🌙</span></button>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="banner">
+      <div class="sakura" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2c1.5 1.6 2 3.4 2 4.8C14 8.6 13.1 10 12 10s-2-1.4-2-3.2c0-1.4.5-3.2 2-4.8z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 22c-1.5-1.6-2-3.4-2-4.8 0-1.8.9-3.2 2-3.2s2 1.4 2 3.2c0 1.4-.5 3.2-2 4.8z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M2 12c1.6-1.5 3.4-2 4.8-2C8.6 10 10 10.9 10 12s-1.4 2-3.2 2c-1.4 0-3.2-.5-4.8-2z"/></svg>
+      </div>
+      <p class="eyebrow">Unit 24 · 文法</p>
+      <h1>第二十四課</h1>
+      <p class="subtitle">くれる ／ もらう ／ あげる</p>
+    </div>
+    <div class="gold-divider"></div>
+
+    <div class="audio-wrap">
+      <p class="audio-label">🎧 音声を聞く</p>
+      <audio controls controlsList="nodownload" oncontextmenu="return false" preload="none" src="unit-24.mp3">
+        お使いのブラウザは audio タグに対応していません。
+      </audio>
+    </div>
+
+    <section class="content">
+      <h2>文型</h2>
+      <div class="patterns">
+        <div class="pattern"><span class="num">1.</span>佐藤さんは わたしに チョコレートを くれました。</div>
+        <div class="pattern"><span class="num">2.</span>わたしは 山田さんに レポートを 直して もらいました。</div>
+        <div class="pattern"><span class="num">3.</span>母は わたしに セーターを 送って くれました。</div>
+        <div class="pattern"><span class="num">4.</span>わたしは 木村さんに 本を 貸して あげました。</div>
+      </div>
+
+      <h2>例文</h2>
+      <ol class="examples">
+        <li class="example">
+          <p class="q">太郎君は おばあちゃんが 好きですか。</p>
+          <p class="a">……はい、 好きです。 おばあちゃんは いつも お菓子を くれます。</p>
+        </li>
+        <li class="example">
+          <p class="q">おいしい ワインですね。</p>
+          <p class="a">……ええ、 佐藤さんが くれました。 フランスの ワインです。</p>
+        </li>
+        <li class="example">
+          <p class="q">ミラーさん、 きのうの パーティーの 料理は 全部 自分で 作りましたか。</p>
+          <p class="a">……いいえ、 ワンさんに 手伝って もらいました。</p>
+        </li>
+        <li class="example">
+          <p class="q">電車で 行きましたか。</p>
+          <p class="a">……いいえ。 山田さんが 車で 送って くれました。</p>
+        </li>
+        <li class="example">
+          <p class="q">太郎君は 母の 日に お母さんに 何を して あげますか。</p>
+          <p class="a">……ピアノを 弾いて あげます。</p>
+        </li>
+      </ol>
+
+      <p class="closing">頑張って ください！ ❀</p>
+    </section>
+
+    <div class="sakura-row" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 2c-2 2-3 5-3 7 0 1.7.9 3 2 3.6V17h2v-4.4c1.1-.6 2-1.9 2-3.6 0-2-1-5-3-7z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2c-2 2-3 5-3 7 0 1.7.9 3 2 3.6V17h2v-4.4c1.1-.6 2-1.9 2-3.6 0-2-1-5-3-7z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2c-2 2-3 5-3 7 0 1.7.9 3 2 3.6V17h2v-4.4c1.1-.6 2-1.9 2-3.6 0-2-1-5-3-7z"/></svg>
+    </div>
+  </div>
+
+  <footer>Unit 24 · くれる・もらう・あげる の 文法</footer>
+</body>
+</html>

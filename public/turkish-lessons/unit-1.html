@@ -7,7 +7,7 @@
 <script src="../theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --tr-red:#E30A17;
@@ -56,7 +56,7 @@
   body{
     margin:0;
     min-height:100vh;
-    font-family:'Merriweather', Georgia, serif;
+    font-family:'Poppins', sans-serif;
     color:var(--tr-ink);
     background:
       radial-gradient(circle at 15% 10%, var(--bg-glow), transparent 40%),
@@ -139,7 +139,8 @@
   }
 
   h1{
-    font-family:'Cinzel', 'Merriweather', serif;
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
     font-size:clamp(2rem, 5vw, 2.9rem);
     margin:0;
     letter-spacing:0.03em;
@@ -150,7 +151,7 @@
 
   .subtitle{
     margin:10px 0 0;
-    font-style:italic;
+    font-style:normal;
     font-weight:300;
     color:rgba(255,253,249,0.9);
     font-size:1.05rem;
@@ -174,7 +175,8 @@
 
   .audio-label{
     margin:0 0 10px;
-    font-family:'Cinzel', serif;
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
     font-size:0.85rem;
     letter-spacing:0.08em;
     color:var(--tr-red-dark);
@@ -193,7 +195,7 @@
     border-left:4px solid var(--tr-gold);
     border-radius:6px;
     font-size:0.92rem;
-    font-style:italic;
+    font-style:normal;
     color:var(--note-text);
     line-height:1.7;
   }
@@ -208,7 +210,8 @@
   }
 
   .story h2{
-    font-family:'Cinzel', serif;
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
     text-align:center;
     color:var(--tr-red-dark);
     font-size:1.7rem;
@@ -232,7 +235,8 @@
   }
 
   .story p:first-of-type::first-letter{
-    font-family:'Cinzel', serif;
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
     font-size:3.1rem;
     line-height:0.8;
     float:left;
@@ -243,7 +247,7 @@
   .closing{
     text-align:center;
     margin-top:8px;
-    font-style:italic;
+    font-style:normal;
     color:var(--closing-color);
     font-size:0.95rem;
   }
@@ -288,7 +292,7 @@
     z-index: 1;
   }
   nav.site .brand {
-    font-family: 'Cinzel', serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     color: var(--tr-ink);
     text-decoration: none;
@@ -322,15 +326,53 @@
     transition: border-color .2s ease, transform .3s ease;
   }
   nav.site .theme-toggle:hover { border-color: var(--tr-red); transform: rotate(15deg); }
+
+  nav.site .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-left: auto;
+  }
+  nav.site .nav-toggle {
+    display: none;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--card-border);
+    background: var(--card-bg);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--tr-ink);
+    margin-left: auto;
+  }
+  @media (max-width: 1280px) {
+    nav.site { flex-wrap: wrap; }
+    nav.site .nav-toggle { display: inline-flex; }
+    nav.site .nav-links {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin: 1rem 0 0;
+    }
+    nav.site .nav-links.open { display: flex; }
+  }
 </style>
 </head>
 <body>
   <nav class="site">
     <a class="brand" href="../index.html">Koe</a>
-    <a class="link" href="../index.html">Home</a>
-    <a class="link" href="../tts.html">Text to Speech</a>
-    <a class="link active" href="index.html">Turkish Lessons</a>
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="icon">🌙</span></button>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a class="link" href="../index.html">Home</a>
+      <a class="link" href="../tts.html">Text to Speech</a>
+      <a class="link" href="../japanese-lessons/index.html">Japanese Lessons</a>
+      <a class="link active" href="index.html">Turkish Lessons</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><span class="icon">🌙</span></button>
+    </div>
   </nav>
   <div class="page">
     <div class="banner">
